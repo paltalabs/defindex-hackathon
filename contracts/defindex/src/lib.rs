@@ -64,17 +64,16 @@ impl Allocator {
             let adapter_address = get_adapter(&e, i);
             let adapter_client = DefIndexAdapterClient::new(&e, &adapter_address);
 
-            // let adapter_amount = if i == (distribution.len() - 1).try_into().unwrap() {
-            //     // For the last iteration, swap whatever remains
-            //     amount - total_swapped
-            // } else {
-            //     // Calculate part of the total amount based on distribution parts
-            //     amount.checked_mul(dist.parts)
-            //         .and_then(|prod| prod.checked_div(total_parts))
-            //         .ok_or(AggregatorError::ArithmeticError)?
-            // };
 
-            let response = adapter_client.deposit(&amount, &from);
+            let adapter_amount = if i == (total_adapters - 1) {
+                amount - total_amount_used
+            } else {
+                amount.checked_mul(adapter_share.into())
+                    .and_then(|prod| prod.checked_div(100))
+                    .ok_or(ContractError::ArithmeticError)?
+            };
+
+            let response = adapter_client.deposit(&adapter_amount, &from);
             //should run deposit functions on adapters
         }
 

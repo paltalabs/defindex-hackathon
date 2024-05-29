@@ -10,4 +10,5 @@ pub enum ContractError {
     ProtocolAddressNotFound = 404,
     DeadlineExpired = 405,
     NeedToWait = 406,
+    ArithmeticError = 407,
 }
