@@ -11,4 +11,5 @@ pub enum ContractError {
     DeadlineExpired = 405,
     NeedToWait = 406,
     ArithmeticError = 407,
+    LengthMismatch = 408,
 }

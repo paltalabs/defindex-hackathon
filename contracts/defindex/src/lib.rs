@@ -33,24 +33,30 @@ pub trait AllocatorTrait {
 pub struct Allocator;
 
 #[contractimpl]
-impl Allocator {
+impl AllocatorTrait for Allocator {
     fn initialize(e: Env, shares: Vec<u32>, adapters: Vec<Address>) -> Result<(), ContractError> {
-        check_initialized(&e)?;
-        set_initialized(&e, true);
-
-        // shares lenght = adapters length
-        set_total_adapters(&e, &shares.len());
-
-        for (index, share) in shares.iter().enumerate() {
-            set_share(&e, index.try_into().unwrap(), share);
-            set_adapter(
-                &e,
-                index.try_into().unwrap(),
-                &adapters.get(index.try_into().unwrap()).unwrap(),
-            )
+        // Ensure shares and adapters have the same length
+        if shares.len() != adapters.len() {
+            return Err(ContractError::LengthMismatch);
         }
+    
+        set_initialized(&e, true);
+        set_total_adapters(&e, &shares.len());
+    
+        let total_adapters = shares.len().clone();
+        let zero: u32 = 0;
+        let share = shares.get(zero);
+        
+        // for i in 0..total_adapters {
+            // let share = shares.get(i.into());
+            // set_share(&e, i.try_into().unwrap(), share);
+            // let adapter = adapters.get(i.try_into().unwrap()).unwrap();
+            // set_adapter(&e, i, &adapter);   
+        // }
+
         Ok(())
     }
+    
 
     fn deposit(e: Env, amount: i128, from: Address) -> Result<(), ContractError> {
         check_initialized(&e)?;
