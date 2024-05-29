@@ -272,6 +272,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "defindex-adapter-interface"
+version = "0.1.0"
+dependencies = [
+ "soroban-sdk",
+]
+
+[[package]]
 name = "der"
 version = "0.7.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1190,13 +1197,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "test-contract"
-version = "0.1.0"
-dependencies = [
- "soroban-sdk",
-]
-
-[[package]]
 name = "thiserror"
 version = "1.0.55"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1433,6 +1433,14 @@ name = "windows_x86_64_msvc"
 version = "0.52.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bec47e5bfd1bff0eeaf6d8b485cc1074891a197ab4225d504cb7a1ab88b02bf0"
+
+[[package]]
+name = "xycloans_adapter"
+version = "0.1.0"
+dependencies = [
+ "defindex-adapter-interface",
+ "soroban-sdk",
+]
 
 [[package]]
 name = "zeroize"
