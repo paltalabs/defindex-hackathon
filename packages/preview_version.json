@@ -1,5 +1,4 @@
 {
-    "previewVersion": 11,
-    "quickstartHash": "testing@sha256:263ab2e416e72b068ea84e4db09971a733b885121225518004520f27f8effa61"
-
+    "previewVersion": "21.0.1",
+    "quickstartHash": "latest@sha256:b7f5a1b2c8ec06cb30a1b79b377ad2bc762cf8cb69ce1fcf7b91185b2acd8a15"
 }
