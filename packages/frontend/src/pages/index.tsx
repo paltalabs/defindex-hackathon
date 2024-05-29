@@ -1,3 +1,4 @@
+import CreateIndex from '@/components/CreateIndex/CreateIndex'
 import { HomePageTitle } from '@/components/home/HomePageTitle'
 import { CenterBody } from '@/components/layout/CenterBody'
 import { ChainInfo } from '@/components/web3/ChainInfo'
@@ -25,6 +26,12 @@ const HomePage: NextPage = () => {
 
         {/* Connect Wallet Button */}
         <ConnectButton />
+
+        {/* Create index section */}
+        <div tw='mt-10 flex flex-col w-4/6 content-center gap-4'>
+          <CreateIndex />
+        </div>
+
 
         <div tw="mt-10 flex w-full flex-wrap items-start justify-center gap-4">
           {/* Chain Metadata Information */}
