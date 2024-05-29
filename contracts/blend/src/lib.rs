@@ -1,11 +1,15 @@
 #![no_std]
+use blend_pool::BlendPoolClient;
 use soroban_sdk::{
     auth::{ContractContext, InvokerContractAuthEntry, SubContractInvocation}, contract, contractimpl, vec, Address, Env, IntoVal, String, Symbol, Val, Vec};
 use soroban_sdk::token::Client as TokenClient;
 
 mod event;
 mod storage;
+mod error;
 mod soroswap_router;
+mod blend_pool;
+mod xycloans_pool;
 
 use storage::{
     extend_instance_ttl, 
@@ -19,40 +23,60 @@ use storage::{
     get_xycloans_pool_address,
 };
 use soroswap_router::SoroswapRouterClient;
-use defindex_adapter_interface::{DefIndexAdapterTrait, AdapterError};
+use xycloans_pool::XycloansPoolClient;
+pub use error::ContractError;
 
-pub fn check_nonnegative_amount(amount: i128) -> Result<(), AdapterError> {
+pub fn check_nonnegative_amount(amount: i128) -> Result<(), ContractError> {
     if amount < 0 {
-        Err(AdapterError::NegativeNotAllowed)
+        Err(ContractError::NegativeNotAllowed)
     } else {
         Ok(())
     }
 }
 
-fn check_initialized(e: &Env) -> Result<(), AdapterError> {
+fn check_initialized(e: &Env) -> Result<(), ContractError> {
     if is_initialized(e) {
         Ok(())
     } else {
-        Err(AdapterError::NotInitialized)
+        Err(ContractError::NotInitialized)
     }
 }
 
+pub trait AddLiquidityTimelockTrait {
+    fn initialize(
+        e: Env,
+        soroswap_router_address: Address,
+        blend_pool_address: Address,
+        xycloans_pool_address: Address,
+    ) -> Result<(), ContractError>;
+
+    fn deposit(
+        e: Env,
+        usdc_amount: i128,
+        from: Address,
+    ) -> Result<Vec<Address>, ContractError>;
+}
+
 #[contract]
-struct SoroswapAdapter;
+struct AddLiquidityTimelock;
 
 #[contractimpl]
-impl DefIndexAdapterTrait for SoroswapAdapter {
+impl AddLiquidityTimelockTrait for AddLiquidityTimelock {
     /// Initializes the contract and sets the phoenix multihop address
     fn initialize(
         e: Env,
-        protocol_address: Address,
-    ) -> Result<(), AdapterError> {
+        soroswap_router_address: Address,
+        blend_pool_address: Address,
+        xycloans_pool_address: Address,
+    ) -> Result<(), ContractError> {
         if is_initialized(&e) {
-            return Err(AdapterError::AlreadyInitialized);
+            return Err(ContractError::AlreadyInitialized);
         }
     
         set_initialized(&e);
-        set_soroswap_router_address(&e, protocol_address);
+        set_soroswap_router_address(&e, soroswap_router_address);
+        set_blend_pool_address(&e, blend_pool_address);
+        set_xycloans_pool_address(&e, xycloans_pool_address);
 
         event::initialized(&e, true);
         extend_instance_ttl(&e);
@@ -63,7 +87,7 @@ impl DefIndexAdapterTrait for SoroswapAdapter {
         e: Env,
         usdc_amount: i128,
         from: Address,
-    ) -> Result<(), AdapterError> {
+    ) -> Result<Vec<Address>, ContractError> {
         check_initialized(&e)?;
         check_nonnegative_amount(usdc_amount)?;
         extend_instance_ttl(&e);
@@ -111,7 +135,7 @@ impl DefIndexAdapterTrait for SoroswapAdapter {
         );
 
         let total_swapped_amount = res.last().unwrap();
-        Ok(())
+        Ok(path)
         // let xlm_balance = TokenClient::new(&e, &xlm_address).balance(&from) - 100_000_000;
 
         // Xycloans Deposit XLM (WORKING)
