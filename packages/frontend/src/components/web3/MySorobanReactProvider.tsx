@@ -6,7 +6,7 @@ import type {ChainMetadata, Connector} from "@soroban-react/types";
 import { xbull } from '@soroban-react/xbull';
 import { lobstr } from '@soroban-react/lobstr'
 
-import deployments from '../../../contracts/deployments.json'
+import deployments from 'root/contracts/deployments.json'
 
 const chains: ChainMetadata[] = [sandbox, standalone, futurenet,testnet];
 const connectors: Connector[] = [freighter(), xbull(), lobstr()]
