@@ -1,4 +1,4 @@
-import { Account, Keypair, SorobanRpc, Transaction, TransactionBuilder, xdr } from 'stellar-sdk';
+import { Account, Keypair, SorobanRpc, Transaction, TransactionBuilder, xdr } from '@stellar/stellar-sdk';
 import { config } from './env_config.js';
 
 type txResponse = SorobanRpc.Api.SendTransactionResponse | SorobanRpc.Api.GetTransactionResponse;
@@ -61,15 +61,15 @@ export async function invokeTransaction(tx: Transaction, source: Keypair, sim: b
   prepped_tx.sign(source);
   const tx_hash = prepped_tx.hash().toString('hex');
 
-  console.log('submitting tx...');
+  // console.log('submitting tx...');
   let response: txResponse = await loadedConfig.rpc.sendTransaction(prepped_tx);
   let status: txStatus = response.status;
-  console.log(`Hash: ${tx_hash}`);
+  // console.log(`Hash: ${tx_hash}`);
   // Poll this until the status is not "NOT_FOUND"
   while (status === 'PENDING' || status === 'NOT_FOUND') {
     // See if the transaction is complete
     await new Promise((resolve) => setTimeout(resolve, 2000));
-    console.log('checking tx...');
+    // console.log('checking tx...');
     response = await loadedConfig.rpc.getTransaction(tx_hash);
     status = response.status;
   }

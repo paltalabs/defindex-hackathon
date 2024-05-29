@@ -1,7 +1,7 @@
 SUBDIRS = $(shell find . -maxdepth 1 -mindepth 1 -type d | grep -v .soroban | grep -v node_modules | grep -v scripts | grep -v utils | grep -v dist | xargs echo)
 default: build
 
-all: test
+all: defindex
 
 build:
 	@for dir in $(SUBDIRS) ; do \

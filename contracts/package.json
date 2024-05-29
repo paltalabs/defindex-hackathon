@@ -5,12 +5,8 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "start": "node scripts/api/server.js",
-    "test": "yarn build && node dist/scripts/manual_testing/all.js",
-    "deploy": "yarn build && node dist/scripts/deploy.js",
-    "upload": "node dist/scripts/upload_addresses.js",
-    "trustline": "yarn build && node dist/scripts/set_trustlines.js",
-    "seeTrustline": "yarn build && node dist/scripts/see_trustlines.js"
+    "deploy": "yarn build && node dist/src/deploy.js",
+    "test": "yarn build && node dist/src/test_contract/test.js"
   },
   "license": "MIT",
   "devDependencies": {
@@ -26,10 +22,7 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "dotenv": "^16.4.5",
-    "stellar-sdk": "^11.2.2",
-    "cors": "^2.8.5",
-    "express": "^4.18.2",
-    "vercel": "^31.0.1"
+    "@stellar/stellar-sdk": "^12.0.0-rc.2",
+    "dotenv": "^16.4.5"
   }
 }

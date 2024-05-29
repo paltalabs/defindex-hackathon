@@ -1,4 +1,8 @@
-**/node_modules
-dist
+*/target
+*/test_snapshots
 .env
-contracts/*/target/
+node_modules
+dist
+.soroban
+protocols
+protocols/**/*
