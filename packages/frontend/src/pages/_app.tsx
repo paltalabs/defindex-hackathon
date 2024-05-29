@@ -9,7 +9,7 @@ import type { AppProps } from 'next/app'
 import { Inconsolata } from 'next/font/google'
 import Head from 'next/head'
 
-import MySorobanReactProvider from "../components/web3/MySorobanReactProvider"
+import StoreProvider from '@/store/StoreProvider'
 
 // Google Font(s) via `next/font`
 const inconsolata = Inconsolata({ subsets: ['latin'] })
@@ -53,7 +53,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         `}</style>
       </Head>
 
-      <MySorobanReactProvider>
+      <StoreProvider>
         <CacheProvider value={cache}>
           <ChakraProvider>
             <DarkMode>
@@ -67,7 +67,7 @@ function MyApp({ Component, pageProps }: AppProps) {
             </DarkMode>
           </ChakraProvider>
         </CacheProvider>
-      </MySorobanReactProvider>
+      </StoreProvider>
     </>
   )
 }

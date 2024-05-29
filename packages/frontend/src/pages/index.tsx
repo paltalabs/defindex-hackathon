@@ -31,7 +31,7 @@ const HomePage: NextPage = () => {
           <ChainInfo />
 
           {/* Greeter Read/Write Contract Interactions */}
-          <GreeterContractInteractions />
+          {/* <GreeterContractInteractions /> */}
         </div>
       </CenterBody>
     </>
