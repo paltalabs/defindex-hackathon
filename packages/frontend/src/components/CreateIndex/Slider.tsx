@@ -10,8 +10,10 @@ import {
   GridItem,
   Input,
   InputGroup,
-  InputRightAddon
+  InputRightAddon,
+  IconButton
 } from '@chakra-ui/react'
+import { DeleteIcon } from '@chakra-ui/icons'
 import { useAppDispatch, useAppSelector } from '@/store/lib/storeHooks'
 import { setAdapterValue, removeAdapter } from '@/store/lib/features/adaptersStore'
 
@@ -97,7 +99,15 @@ function ItemSlider({
     <Grid templateColumns="repeat(5, 1fr)" gap={2} alignItems={'center'} my={4}>
       <GridItem colSpan={8} display={'flex'} alignItems={'center'}>
         <h3>{address}</h3>
-        <Button mx={2} onClick={handleDelete}>X</Button>
+        <IconButton
+          aria-label='delete__button'
+          mx={2}
+          onClick={handleDelete}
+          icon={<DeleteIcon />}
+          variant='outline'
+          colorScheme='red'
+          size={'xs'}
+        />
       </GridItem>
       <GridItem colSpan={4} justifySelf={'end'} alignContent={'end'}>
         <InputGroup>
