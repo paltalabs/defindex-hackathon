@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
   Slider,
   SliderTrack,
@@ -13,12 +13,11 @@ import {
   InputRightAddon
 } from '@chakra-ui/react'
 import { useAppDispatch, useAppSelector } from '@/store/lib/storeHooks'
-import { selectTotalValues, setAdapterValue } from '@/store/lib/features/adaptersStore'
-import { set } from 'react-hook-form'
+import { setAdapterValue } from '@/store/lib/features/adaptersStore'
 
 
 function ItemSlider({
-  address = 'Soroswap Address',
+  address = 'Address',
   value = 0,
 }: {
   address: string,
@@ -28,7 +27,7 @@ function ItemSlider({
   const [showTooltip, setShowTooltip] = React.useState(false)
 
   const totalValues = useAppSelector(state => state.adapters.totalValues)
-  const [inputValue, setInputValue] = React.useState(value)
+  const [inputValue, setInputValue] = React.useState<number | string>(value)
 
   const setVal = (val: number) => {
     const total = totalValues! - value + val
@@ -36,11 +35,11 @@ function ItemSlider({
       setInputValue(val)
       dispatch(setAdapterValue({ address, value: val }))
     } else {
-      setMax(val)
+      setMax()
     }
   }
 
-  const setMax = async (val: number) => {
+  const setMax = async () => {
     const rest = 100 - totalValues!
     const newVal = value + rest
     setInputValue(newVal)
@@ -49,35 +48,61 @@ function ItemSlider({
 
   const handleValueInput = (e: any) => {
     const val = parseInt(e.target.value)
-    console.log(e.target.value)
-    const parsedValue = parseInt(e.target.value.slice(1))
-    //Si el valor es menor a 100 se actualiza
-    if (val <= 100) {
-      setVal(val)
+    const startWithZero = e.target.value.startsWith('0')
+    if (val <= 100 && startWithZero == true) {
+      setInputValue(Math.floor(val / 1))
+    } else if (val <= 100 && startWithZero == false) {
+      setInputValue(val)
     }
-    //Si el valor es mayor a 100 se actualiza al maximo
     else if (val > 100) {
-      setVal(val)
+      setInputValue(val)
     }
-    //Si el valor no es un numero se actualiza al valor actual
     else if (e.target.value == '') {
-      setVal(parsedValue)
-    }
-    //Si el comienza con 0 se actualiza al valor menos el 0
-    else if (value == 0) {
-      setVal(parsedValue)
+      setInputValue('')
     }
 
   }
 
+  const handleBlur = (e: any) => {
+    const val = parseInt(e.target.value)
+    if (val > 100 && inputValue == '') {
+      setVal(0)
+    }
+    setVal(val)
+  }
+
+  const handleEnter = (e: any) => {
+    if (e.key === 'Enter') {
+      const val = parseInt(e.target.value)
+      console.log(val)
+      console.log(inputValue.toString().length)
+      if (isNaN(val) && inputValue.toString().length === 0) {
+        console.log(true)
+        setVal(0)
+      }
+      setVal(val)
+    }
+  }
+
+  useEffect(() => {
+    setInputValue(value)
+  }, [value]) 
+
   return (
     <Grid templateColumns="repeat(5, 1fr)" gap={2} alignItems={'center'} my={4}>
-      <GridItem colSpan={6}>
+      <GridItem colSpan={8}>
         <h3>{address}</h3>
       </GridItem>
-      <GridItem colSpan={1} justifySelf={'end'} alignContent={'end'}>
-        <InputGroup >
-          <Input type='number' min={0} placeholder={value.toString()} onInput={(e) => { handleValueInput(e) }} value={inputValue} />
+      <GridItem colSpan={4} justifySelf={'end'} alignContent={'end'}>
+        <InputGroup>
+          <Input
+            type='number'
+            min={0}
+            placeholder={value.toString()}
+            onInput={handleValueInput}
+            onBlur={handleBlur}
+            onKeyDown={handleEnter}
+            value={inputValue} />
           <InputRightAddon>%</InputRightAddon>
         </InputGroup>
       </GridItem>
@@ -94,7 +119,7 @@ function ItemSlider({
           onChange={(v) => { setVal(v) }}
           onMouseEnter={() => setShowTooltip(true)}
           onMouseLeave={() => setShowTooltip(false)}
-          onChangeEnd={(val) => console.log(val)}>
+          onChangeEnd={(val) => setVal(val)}>
           <SliderTrack>
             <SliderFilledTrack />
           </SliderTrack>
@@ -112,7 +137,7 @@ function ItemSlider({
       </GridItem>
       <GridItem colSpan={12} justifySelf={'end'}>
         <Button
-          onClick={() => { setMax(value) }}
+          onClick={() => { setMax() }}
           colorScheme={'green'}
         >
           Set Max
