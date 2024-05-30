@@ -13,22 +13,22 @@ export async function liquidityTimelock(
   let balance = account.balances.filter((item) => item.asset_type == "native");
   console.log("Current Admin account balance:", balance[0].balance);
 
-  const soroswap_router =
-    "CAG5LRYQ5JVEUI5TEID72EYOVX44TTUJT5BQR2J6J77FH65PCCFAJDDH";
   // const soroswap_router =
-  //   "CB74KXQXEGKGPU5C5FI22X64AGQ63NANVLRZBS22SSCMLJDXNHED72MO";
-  const usdc_address =
-    "CCW67TSZV3SSS2HXMBQ5JFGCKJNXKZM7UQUWUZPUTHXSTZLEO7SJMI75";
+  //   "CAG5LRYQ5JVEUI5TEID72EYOVX44TTUJT5BQR2J6J77FH65PCCFAJDDH";
+  const soroswap_router =
+    "CB74KXQXEGKGPU5C5FI22X64AGQ63NANVLRZBS22SSCMLJDXNHED72MO";
   // const usdc_address =
-  //   "CCKW6SMINDG6TUWJROIZ535EW2ZUJQEDGSKNIK3FBK26PAMBZDVK2BZA";
-  const xlm_address =
-    "CAS3J7GYLGXMF6TDJBBYYSE3HQ6BBSMLNUQ34T6TZMYMW2EVH34XOWMA";
+  //   "CCW67TSZV3SSS2HXMBQ5JFGCKJNXKZM7UQUWUZPUTHXSTZLEO7SJMI75";
+  const usdc_address =
+    "CCKW6SMINDG6TUWJROIZ535EW2ZUJQEDGSKNIK3FBK26PAMBZDVK2BZA";
   // const xlm_address =
-  //   "CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC";
-  const pair_address =
-    "CAM7DY53G63XA4AJRS24Z6VFYAFSSF76C3RZ45BE5YU3FQS5255OOABP";
+  //   "CAS3J7GYLGXMF6TDJBBYYSE3HQ6BBSMLNUQ34T6TZMYMW2EVH34XOWMA";
+  const xlm_address =
+    "CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC";
   // const pair_address =
-  //   "CAAXGP7LTPV4A57LSKDWTSPPJUGFGNU34KQ3FYIPYUUP2SLFGVMTYKYU";
+  //   "CAM7DY53G63XA4AJRS24Z6VFYAFSSF76C3RZ45BE5YU3FQS5255OOABP";
+  const pair_address =
+    "CAAXGP7LTPV4A57LSKDWTSPPJUGFGNU34KQ3FYIPYUUP2SLFGVMTYKYU";
 
   console.log("-------------------------------------------------------");
   console.log("Initialize Soroswap Adapter Contract");
@@ -128,6 +128,26 @@ export async function liquidityTimelock(
     true
   );
   console.log("LP USER BALANCE:", scValToNative(lpUserBalance.result.retval));
+
+  console.log("-------------------------------------------------------");
+  console.log("Testing Balance Method");
+  console.log("-------------------------------------------------------");
+  try {
+    const balanceParams = [
+      new Address(loadedConfig.admin.publicKey()).toScVal(),
+    ];
+
+    const result = await invokeCustomContract(
+      addressBook.getContractId(contractKey),
+      "balance",
+      balanceParams,
+      loadedConfig.admin
+    );
+    console.log("🚀 « result:", result);
+    console.log("🚀 « returnValue:", scValToNative(result.returnValue));
+  } catch (error) {
+    console.log("🚀 « error:", error);
+  }
 }
 
 const network = process.argv[2];

@@ -18,4 +18,9 @@ pub trait DefIndexAdapterTrait {
         amount: i128,
         from: Address
     ) -> Result<(), AdapterError>;
+
+    fn balance(
+        e: Env,
+        from: Address,
+    ) -> Result<i128, AdapterError>;
 }
