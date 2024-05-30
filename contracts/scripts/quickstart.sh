@@ -74,15 +74,15 @@ docker run -dti \
 echo "  "
 echo "  "
 
-echo "5. Run a stellar quickstart container"
-# Run the stellar quickstart image
-docker run --rm -ti \
-  --name stellar \
-  --network soroban-network \
-  -p 8000:8000 \
-  stellar/quickstart:${quickstartHash} \
-  $ARGS \
-  --enable-soroban-rpc \
-  --protocol-version 20 \
-  --enable-soroban-diagnostic-events \
-  "$@" # Pass through args from the CLI
+# echo "5. Run a stellar quickstart container"
+# # Run the stellar quickstart image
+# docker run --rm -ti \
+#   --name stellar \
+#   --network soroban-network \
+#   -p 8000:8000 \
+#   stellar/quickstart:${quickstartHash} \
+#   $ARGS \
+#   --enable-soroban-rpc \
+#   --protocol-version 20 \
+#   --enable-soroban-diagnostic-events \
+#   "$@" # Pass through args from the CLI

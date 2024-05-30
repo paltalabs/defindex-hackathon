@@ -1,5 +1,5 @@
 {
-    "previewHash": "21.0.1@sha256:55c0cdfdc62f5daee50c33e3f7bcf43987a8c45a1ecd634bd27088aba1b6af75",
+    "previewHash": "21.0.1",
     "quickstartHash": "latest@sha256:b7f5a1b2c8ec06cb30a1b79b377ad2bc762cf8cb69ce1fcf7b91185b2acd8a15",
     "networkConfig": [
         {
@@ -13,13 +13,15 @@
             "horizon_rpc_url": "http://stellar:8000",
             "soroban_rpc_url": "http://stellar:8000/soroban/rpc",
             "soroban_network_passphrase": "Standalone Network ; February 2017"
-        },    {
+        },
+        {
             "network": "futurenet",
             "friendbot_url": "https://friendbot-futurenet.stellar.org/",
             "horizon_rpc_url": "https://horizon-futurenet.stellar.org",
             "soroban_rpc_url": "https://rpc-futurenet.stellar.org/",
             "soroban_network_passphrase": "Test SDF Future Network ; October 2022"
-        },    {
+        },
+        {
             "network": "testnet",
             "friendbot_url": "https://friendbot.stellar.org/",
             "horizon_rpc_url": "https://horizon-testnet.stellar.org",
