@@ -1,4 +1,9 @@
-import { Address, nativeToScVal, scValToNative } from "@stellar/stellar-sdk";
+import {
+  Address,
+  nativeToScVal,
+  scValToNative,
+  xdr,
+} from "@stellar/stellar-sdk";
 import { AddressBook } from "../../utils/address_book.js";
 import { invokeCustomContract } from "../../utils/contract.js";
 import { config } from "../../utils/env_config.js";
@@ -21,18 +26,38 @@ export async function testAllocator(
   console.log(`Initialize ${contractKey} Contract`);
   console.log("-------------------------------------------------------");
   try {
-    const initParams = [
-      nativeToScVal([100]),
-      nativeToScVal([
-        new Address(addressBook.getContractId("soroswap_adapter")),
-      ]),
+    const adapterAddressPair = [
+      {
+        share: 100,
+        address: new Address(addressBook.getContractId("soroswap_adapter")),
+      },
     ];
-    console.log("🚀 « initParams:", initParams);
+
+    const adapterAddressPairScVal = adapterAddressPair.map((adapter, index) => {
+      return xdr.ScVal.scvMap([
+        new xdr.ScMapEntry({
+          key: xdr.ScVal.scvSymbol("address"),
+          val: adapter.address.toScVal(),
+        }),
+        new xdr.ScMapEntry({
+          key: xdr.ScVal.scvSymbol("index"),
+          val: xdr.ScVal.scvU32(index),
+        }),
+        new xdr.ScMapEntry({
+          key: xdr.ScVal.scvSymbol("share"),
+          val: xdr.ScVal.scvU32(adapter.share),
+        }),
+      ]);
+    });
+
+    const adapterAddressesScVal = xdr.ScVal.scvVec(adapterAddressPairScVal);
+
+    const allocatorInitParams: xdr.ScVal[] = [adapterAddressesScVal];
 
     const result = await invokeCustomContract(
       addressBook.getContractId(contractKey),
       "initialize",
-      initParams,
+      allocatorInitParams,
       loadedConfig.admin
     );
     console.log("🚀 « result:", scValToNative(result.returnValue));
@@ -71,6 +96,21 @@ export async function testAllocator(
   //   true
   // );
   // console.log("LP USER BALANCE:", scValToNative(lpUserBalance.result.retval));
+
+  console.log("-------------------------------------------------------");
+  console.log("Testing Print Method");
+  console.log("-------------------------------------------------------");
+  try {
+    const result = await invokeCustomContract(
+      addressBook.getContractId(contractKey),
+      "print",
+      [],
+      loadedConfig.admin
+    );
+    console.log("🚀 « result:", scValToNative(result.returnValue));
+  } catch (error) {
+    console.log("🚀 « error:", error);
+  }
 
   // console.log("-------------------------------------------------------");
   // console.log("Testing Deposit Method");

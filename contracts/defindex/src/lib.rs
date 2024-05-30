@@ -4,6 +4,7 @@ use soroban_sdk::{contract, contractimpl, Address, Env, String, Symbol, Vec};
 mod adapter;
 mod error;
 mod storage;
+mod models;
 
 use adapter::DefIndexAdapterClient;
 pub use error::ContractError;
@@ -12,6 +13,8 @@ use storage::{
     get_adapter, get_share, get_total_adapters, is_initialized, set_adapter, set_initialized,
     set_share, set_total_adapters,
 };
+
+use models::AdapterAddressPair;
 
 fn check_initialized(e: &Env) -> Result<(), ContractError> {
     if is_initialized(e) {
@@ -22,11 +25,11 @@ fn check_initialized(e: &Env) -> Result<(), ContractError> {
 }
 
 pub trait AllocatorTrait {
-    fn initialize(e: Env, shares: Vec<u32>, adapters: Vec<Address>) -> Result<(), ContractError>;
+    fn initialize(e: Env, adapters: Vec<AdapterAddressPair>) -> Result<(), ContractError>;
 
     fn deposit(e: Env, amount: i128, from: Address) -> Result<(), ContractError>;
 
-    fn print(e: Env) -> u32;
+    fn print(e: Env) -> Address;
 }
 
 #[contract]
@@ -34,25 +37,20 @@ pub struct Allocator;
 
 #[contractimpl]
 impl AllocatorTrait for Allocator {
-    fn initialize(e: Env, shares: Vec<u32>, adapters: Vec<Address>) -> Result<(), ContractError> {
-        // Ensure shares and adapters have the same length
-        if shares.len() != adapters.len() {
-            return Err(ContractError::LengthMismatch);
+    fn initialize(e: Env, adapters: Vec<AdapterAddressPair>) -> Result<(), ContractError> {
+        if is_initialized(&e) {
+            return Err(ContractError::AlreadyInitialized);
         }
-    
+
+        // should verify that shares are not more than 100%
+
         set_initialized(&e, true);
-        set_total_adapters(&e, &shares.len());
+        set_total_adapters(&e, &adapters.len());
     
-        let total_adapters = shares.len().clone();
-        let zero: u32 = 0;
-        let share = shares.get(zero);
-        
-        // for i in 0..total_adapters {
-            // let share = shares.get(i.into());
-            // set_share(&e, i.try_into().unwrap(), share);
-            // let adapter = adapters.get(i.try_into().unwrap()).unwrap();
-            // set_adapter(&e, i, &adapter);   
-        // }
+        for adapter in adapters.iter() {
+            set_share(&e, adapter.index.clone(), adapter.share.clone());
+            set_adapter(&e, adapter.index.clone(), &adapter.address);   
+        }
 
         Ok(())
     }
@@ -86,8 +84,8 @@ impl AllocatorTrait for Allocator {
         Ok(())
     }
 
-    fn print(e: Env) -> u32 {
-        get_total_adapters(&e)
+    fn print(e: Env) -> Address {
+        get_adapter(&e, 0)
     }
 }
 
