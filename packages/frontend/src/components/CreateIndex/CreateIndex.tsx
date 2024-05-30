@@ -4,6 +4,7 @@ import {
   Button,
 } from '@chakra-ui/react'
 import ItemSlider from './Slider'
+import AddNewAdapterButton from './AddNewAdapterButton'
 import { useAppDispatch, useAppSelector } from '@/store/lib/storeHooks'
 import { pushAdapter } from '@/store/lib/features/adaptersStore'
 import { useFactoryCallback, FactoryMethod } from '@/hooks/useFactory'
@@ -16,16 +17,12 @@ import {
 
 function CreateIndex() {
   const adapters = useAppSelector(state => state.adapters.adapters)
-  const dispatch = useAppDispatch();
 
   const factory = useFactoryCallback()
-  const addAdapter = async () => {
-    console.log('adding adapter')
-    await dispatch(pushAdapter({ address: `Soroswap adapter ${adapters.length + 1}`, value: 0 }))
-  }
+
   const deployDefindex = async () => {
-    console.log('🚀 ~ deployDefindex ~ adapter.address:', adapter.address);
     const adapterAddressPairScVal = adapters.map((adapter, index) => {
+      console.log('🚀 ~ deployDefindex ~ adapter.address:', adapter.address);
       return xdr.ScVal.scvMap([
         new xdr.ScMapEntry({
           key: xdr.ScVal.scvSymbol("address"),
@@ -69,12 +66,10 @@ function CreateIndex() {
         <div>
           <h2>Total: {totalValues}%</h2>
         </div>
-        <Button colorScheme="green" size="lg" mt={4} onClick={addAdapter}>
-          Add adapter +
-        </Button>
         <Button colorScheme="purple" size="lg" mt={4} onClick={deployDefindex}>
           Deploy DeFindex
         </Button>
+        <AddNewAdapterButton />
       </Card>
     </>
   )
