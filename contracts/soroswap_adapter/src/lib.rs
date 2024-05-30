@@ -65,16 +65,17 @@ impl DefIndexAdapterTrait for SoroswapAdapter {
         check_nonnegative_amount(amount)?;
         extend_instance_ttl(&e);
 
-        // let usdc_address = Address::from_string(&String::from_str(&e, "CCW67TSZV3SSS2HXMBQ5JFGCKJNXKZM7UQUWUZPUTHXSTZLEO7SJMI75"));
-        // let xlm_address = Address::from_string(&String::from_str(&e, "CAS3J7GYLGXMF6TDJBBYYSE3HQ6BBSMLNUQ34T6TZMYMW2EVH34XOWMA"));
-        let usdc_address = Address::from_string(&String::from_str(&e, "CCKW6SMINDG6TUWJROIZ535EW2ZUJQEDGSKNIK3FBK26PAMBZDVK2BZA"));
-        let xlm_address = Address::from_string(&String::from_str(&e, "CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC"));
-
+        let usdc_address = Address::from_string(&String::from_str(&e, "CCW67TSZV3SSS2HXMBQ5JFGCKJNXKZM7UQUWUZPUTHXSTZLEO7SJMI75"));
+        let xlm_address = Address::from_string(&String::from_str(&e, "CAS3J7GYLGXMF6TDJBBYYSE3HQ6BBSMLNUQ34T6TZMYMW2EVH34XOWMA"));
+        // let usdc_address = Address::from_string(&String::from_str(&e, "CCKW6SMINDG6TUWJROIZ535EW2ZUJQEDGSKNIK3FBK26PAMBZDVK2BZA"));
+        // let xlm_address = Address::from_string(&String::from_str(&e, "CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC"));
+        
         // Setting up Soroswap router client
         let soroswap_router_address = get_soroswap_router_address(&e);
         let soroswap_router_client = SoroswapRouterClient::new(&e, &soroswap_router_address);
-
-        let pair_address = soroswap_router_client.router_pair_for(&usdc_address, &xlm_address);
+        
+        let pair_address = Address::from_string(&String::from_str(&e, "CAM7DY53G63XA4AJRS24Z6VFYAFSSF76C3RZ45BE5YU3FQS5255OOABP"));
+        // let pair_address = soroswap_router_client.router_pair_for(&usdc_address, &xlm_address);
 
         let swap_amount = amount.checked_div(2).unwrap();
 

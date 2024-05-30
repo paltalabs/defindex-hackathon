@@ -12,12 +12,12 @@
   {
     "contractId": "soroswap_adapter",
     "networkPassphrase": "Public Global Stellar Network ; September 2015",
-    "contractAddress": "CAQT6KKW62TRIFSM2S7UDR3MRMZCT3KR5TI3UNFSOR2N2VEDGXBJDOK7"
+    "contractAddress": "CCHC7FAP7L7UFCLBJDQZVFQVHWG2ZDXQSZVPWRXCZVKCFUNCRUDX6IHU"
   },
   {
     "contractId": "defindex",
     "networkPassphrase": "Public Global Stellar Network ; September 2015",
-    "contractAddress": "CCJRMSMPU7PRJYMCFHBPVFESBM4NI65TW2N5GSIXJZ6H3FLXYQLWL3IQ"
+    "contractAddress": "CDJ3DWKNQRDM5OFKXE7Y3AZPXIXJTOG33IGL7XQHTBVNZMYRCRLPXTM5"
   },
   {
     "contractId": "soroswap_adapter_pair",
