@@ -6,14 +6,56 @@ import {
 import ItemSlider from './Slider'
 import { useAppDispatch, useAppSelector } from '@/store/lib/storeHooks'
 import { pushAdapter } from '@/store/lib/features/adaptersStore'
+import { useFactoryCallback, FactoryMethod } from '@/hooks/useFactory'
+import {
+  Address,
+  nativeToScVal,
+  scValToNative,
+  xdr,
+} from "@stellar/stellar-sdk";
+
 function CreateIndex() {
   const adapters = useAppSelector(state => state.adapters.adapters)
   const dispatch = useAppDispatch();
+
+  const factory = useFactoryCallback()
   const addAdapter = async () => {
     console.log('adding adapter')
     await dispatch(pushAdapter({ address: `Soroswap adapter ${adapters.length + 1}`, value: 0 }))
   }
+  const deployDefindex = async () => {
+    console.log('🚀 ~ deployDefindex ~ adapter.address:', adapter.address);
+    const adapterAddressPairScVal = adapters.map((adapter, index) => {
+      return xdr.ScVal.scvMap([
+        new xdr.ScMapEntry({
+          key: xdr.ScVal.scvSymbol("address"),
+          val: (new Address(adapter.address)).toScVal(),
+
+        }),
+        new xdr.ScMapEntry({
+          key: xdr.ScVal.scvSymbol("index"),
+          val: xdr.ScVal.scvU32(index),
+        }),
+        new xdr.ScMapEntry({
+          key: xdr.ScVal.scvSymbol("share"),
+          val: xdr.ScVal.scvU32(adapter.value),
+        }),
+      ]);
+    });
+
+    const adapterAddressesScVal = xdr.ScVal.scvVec(adapterAddressPairScVal);
+
+    const createDefindexParams: xdr.ScVal[] = [adapterAddressesScVal];
+      console.log('deploying Defindex')
+    const result  = await factory(
+      FactoryMethod.CREATE_DEFINDEX,
+      createDefindexParams,
+    )
+    console.log('🚀 ~ deployDefindex ~ result:', result);
+    
+  }
   const totalValues = useAppSelector(state => state.adapters.totalValues)
+
 
   return (
     <>
@@ -29,6 +71,9 @@ function CreateIndex() {
         </div>
         <Button colorScheme="green" size="lg" mt={4} onClick={addAdapter}>
           Add adapter +
+        </Button>
+        <Button colorScheme="purple" size="lg" mt={4} onClick={deployDefindex}>
+          Deploy DeFindex
         </Button>
       </Card>
     </>
