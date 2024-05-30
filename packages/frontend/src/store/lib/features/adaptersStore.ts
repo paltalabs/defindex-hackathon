@@ -1,11 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import type { RootState } from '../store'
-
+import adapters from './adapters.json'
 
 interface Adapter {
   address: string;
   value: number;
+  name?: string;
 }
 
 interface AdaptersState {
@@ -13,16 +14,19 @@ interface AdaptersState {
   totalValues?: number;
 }
 
+
 // Define the initial state using that type
 const initialState: AdaptersState = {
   adapters: [
-    {
-      address: 'Soroswap Address',
-      value: 5
-    }
   ],
-  totalValues: 5
+  totalValues: 0
 }
+
+export const defaultAdapters = adapters.map((adapter) => ({
+  address: adapter.address,
+  name: adapter.name,
+  value: 0
+}))
 
 export const adaptersSlice = createSlice({
   name: 'Adapters',
