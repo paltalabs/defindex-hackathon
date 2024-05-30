@@ -13,7 +13,7 @@ import {
   InputRightAddon
 } from '@chakra-ui/react'
 import { useAppDispatch, useAppSelector } from '@/store/lib/storeHooks'
-import { setAdapterValue } from '@/store/lib/features/adaptersStore'
+import { setAdapterValue, removeAdapter } from '@/store/lib/features/adaptersStore'
 
 
 function ItemSlider({
@@ -84,14 +84,20 @@ function ItemSlider({
     }
   }
 
+  const handleDelete = () => {
+    dispatch(setAdapterValue({ address, value: 0 }))
+    dispatch(removeAdapter({ address: address, value: 0 }))
+  }
+
   useEffect(() => {
     setInputValue(value)
   }, [value]) 
 
   return (
     <Grid templateColumns="repeat(5, 1fr)" gap={2} alignItems={'center'} my={4}>
-      <GridItem colSpan={8}>
+      <GridItem colSpan={8} display={'flex'} alignItems={'center'}>
         <h3>{address}</h3>
+        <Button mx={2} onClick={handleDelete}>X</Button>
       </GridItem>
       <GridItem colSpan={4} justifySelf={'end'} alignContent={'end'}>
         <InputGroup>
