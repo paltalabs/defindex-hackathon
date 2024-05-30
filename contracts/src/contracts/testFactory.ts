@@ -69,7 +69,6 @@ export async function testFactory(
 
   const createDefindexParams: xdr.ScVal[] = [adapterAddressesScVal];
 
-
   try {
     const result = await invokeCustomContract(
       addressBook.getContractId(contractKey),
@@ -78,7 +77,6 @@ export async function testFactory(
       loadedConfig.admin
     );
     console.log("🚀 « result:", scValToNative(result.returnValue));
-
   } catch (error) {
     console.log("error:", error);
   }
