@@ -17,7 +17,7 @@ use storage::{
     set_share, set_total_adapters,
 };
 
-use models::AdapterAddressPair;
+use models::AdapterParams;
 
 fn check_initialized(e: &Env) -> Result<(), ContractError> {
     if is_initialized(e) {
@@ -28,7 +28,7 @@ fn check_initialized(e: &Env) -> Result<(), ContractError> {
 }
 
 pub trait AllocatorTrait {
-    fn initialize(e: Env, adapters: Vec<AdapterAddressPair>) -> Result<(), ContractError>;
+    fn initialize(e: Env, adapters: Vec<AdapterParams>) -> Result<(), ContractError>;
 
     fn deposit(e: Env, amount: i128, from: Address) -> Result<(), ContractError>;
 
@@ -40,7 +40,7 @@ pub struct Allocator;
 
 #[contractimpl]
 impl AllocatorTrait for Allocator {
-    fn initialize(e: Env, adapters: Vec<AdapterAddressPair>) -> Result<(), ContractError> {
+    fn initialize(e: Env, adapters: Vec<AdapterParams>) -> Result<(), ContractError> {
         if is_initialized(&e) {
             return Err(ContractError::AlreadyInitialized);
         }
