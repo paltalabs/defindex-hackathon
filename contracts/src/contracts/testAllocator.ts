@@ -117,7 +117,7 @@ export async function testAllocator(
   console.log("-------------------------------------------------------");
   try {
     const depositParams = [
-      nativeToScVal(10000000000, { type: "i128" }),
+      nativeToScVal(100000000, { type: "i128" }),
       new Address(loadedConfig.admin.publicKey()).toScVal(),
     ];
 
