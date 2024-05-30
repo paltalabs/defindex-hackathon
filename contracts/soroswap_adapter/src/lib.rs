@@ -57,12 +57,12 @@ impl DefIndexAdapterTrait for SoroswapAdapter {
 
     fn deposit(
         e: Env,
-        usdc_amount: i128,
+        amount: i128,
         from: Address,
     ) -> Result<(), AdapterError> {
         from.require_auth();
         check_initialized(&e)?;
-        check_nonnegative_amount(usdc_amount)?;
+        check_nonnegative_amount(amount)?;
         extend_instance_ttl(&e);
 
         // let usdc_address = Address::from_string(&String::from_str(&e, "CCW67TSZV3SSS2HXMBQ5JFGCKJNXKZM7UQUWUZPUTHXSTZLEO7SJMI75"));
@@ -76,6 +76,8 @@ impl DefIndexAdapterTrait for SoroswapAdapter {
 
         let pair_address = soroswap_router_client.router_pair_for(&usdc_address, &xlm_address);
 
+        let swap_amount = amount.checked_div(2).unwrap();
+
         let mut path: Vec<Address> = Vec::new(&e);
         path.push_back(usdc_address.clone());
         path.push_back(xlm_address.clone());
@@ -83,7 +85,7 @@ impl DefIndexAdapterTrait for SoroswapAdapter {
         let mut swap_args: Vec<Val> = vec![&e];
         swap_args.push_back(from.into_val(&e));
         swap_args.push_back(pair_address.into_val(&e));
-        swap_args.push_back(usdc_amount.into_val(&e));
+        swap_args.push_back(swap_amount.into_val(&e));
 
         e.authorize_as_current_contract(vec![
             &e,
@@ -97,7 +99,6 @@ impl DefIndexAdapterTrait for SoroswapAdapter {
             })
         ]);
 
-        let swap_amount = usdc_amount.checked_div(2).unwrap();
 
         let swap_result = soroswap_router_client.swap_exact_tokens_for_tokens(
             &swap_amount,
@@ -110,7 +111,7 @@ impl DefIndexAdapterTrait for SoroswapAdapter {
         let total_swapped_amount = swap_result.last().unwrap();
 
         // Add liquidity
-       let result = soroswap_router_client.add_liquidity(
+        let result = soroswap_router_client.add_liquidity(
             &usdc_address,
             &xlm_address,
             &swap_amount,

@@ -1,0 +1,36 @@
+[package]
+name = "soroswap-adapter-pair"
+version = "0.1.0"
+edition = "2021"
+description = "Simple Soroswap adapter contract"
+homepage = "https://github.com/paltalabs/defindex-hackathon"
+repository = "https://github.com/paltalabs/defindex-hackathon"
+authors = ["coderipper <joaquin@paltalabs.io>", "devmonster <francisco@paltalabs.io>"]
+readme = "README.md"
+keywords = ["no_std", "wasm", "soroswap", "amm", "soroban"]
+publish = true
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+soroban-sdk = { version = "20.5.0" }
+defindex-adapter-interface={ path="../interface", version="0.1.0", package="defindex-adapter-interface" }
+soroswap-library = "0.3.0"
+
+[dev_dependencies]
+soroban-sdk = { version = "20.5.0", features = ["testutils"] }
+defindex-adapter-interface={path="../interface"}
+
+[profile.release]
+opt-level = "z"
+debug = 0
+strip = "symbols"
+debug-assertions = false
+panic = "abort"
+codegen-units = 1
+lto = true
+
+[profile.release-with-logs]
+inherits = "release"
+debug-assertions = true
