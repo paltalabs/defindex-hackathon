@@ -13,28 +13,18 @@ export async function liquidityTimelock(
   let balance = account.balances.filter((item) => item.asset_type == "native");
   console.log("Current Admin account balance:", balance[0].balance);
 
-  const soroswap_router =
-    "CAG5LRYQ5JVEUI5TEID72EYOVX44TTUJT5BQR2J6J77FH65PCCFAJDDH";
-  // const soroswap_router =
-  //   "CB74KXQXEGKGPU5C5FI22X64AGQ63NANVLRZBS22SSCMLJDXNHED72MO";
+  const soroswap_pair =
+    "CAAXGP7LTPV4A57LSKDWTSPPJUGFGNU34KQ3FYIPYUUP2SLFGVMTYKYU";
   const usdc_address =
-    "CCW67TSZV3SSS2HXMBQ5JFGCKJNXKZM7UQUWUZPUTHXSTZLEO7SJMI75";
-  // const usdc_address =
-  //   "CCKW6SMINDG6TUWJROIZ535EW2ZUJQEDGSKNIK3FBK26PAMBZDVK2BZA";
+    "CCKW6SMINDG6TUWJROIZ535EW2ZUJQEDGSKNIK3FBK26PAMBZDVK2BZA";
   const xlm_address =
-    "CAS3J7GYLGXMF6TDJBBYYSE3HQ6BBSMLNUQ34T6TZMYMW2EVH34XOWMA";
-  // const xlm_address =
-  //   "CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC";
-  const pair_address =
-    "CAM7DY53G63XA4AJRS24Z6VFYAFSSF76C3RZ45BE5YU3FQS5255OOABP";
-  // const pair_address =
-  //   "CAAXGP7LTPV4A57LSKDWTSPPJUGFGNU34KQ3FYIPYUUP2SLFGVMTYKYU";
+    "CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC";
 
   console.log("-------------------------------------------------------");
   console.log("Initialize Soroswap Adapter Contract");
   console.log("-------------------------------------------------------");
   try {
-    const initParams = [new Address(soroswap_router).toScVal()];
+    const initParams = [new Address(soroswap_pair).toScVal()];
     const result = await invokeCustomContract(
       addressBook.getContractId(contractKey),
       "initialize",
@@ -69,21 +59,13 @@ export async function liquidityTimelock(
     true
   );
   console.log("XLM USER BALANCE:", scValToNative(xlmUserBalance.result.retval));
-  let lpUserBalance = await invokeCustomContract(
-    pair_address,
-    "balance",
-    [new Address(loadedConfig.admin.publicKey()).toScVal()],
-    loadedConfig.admin,
-    true
-  );
-  console.log("LP USER BALANCE:", scValToNative(lpUserBalance.result.retval));
 
   console.log("-------------------------------------------------------");
   console.log("Testing Deposit Method");
   console.log("-------------------------------------------------------");
   try {
     const depositParams = [
-      nativeToScVal(100000000, { type: "i128" }),
+      nativeToScVal(1000000000, { type: "i128" }),
       new Address(loadedConfig.admin.publicKey()).toScVal(),
     ];
 
@@ -120,14 +102,6 @@ export async function liquidityTimelock(
     true
   );
   console.log("XLM USER BALANCE:", scValToNative(xlmUserBalance.result.retval));
-  lpUserBalance = await invokeCustomContract(
-    pair_address,
-    "balance",
-    [new Address(loadedConfig.admin.publicKey()).toScVal()],
-    loadedConfig.admin,
-    true
-  );
-  console.log("LP USER BALANCE:", scValToNative(lpUserBalance.result.retval));
 }
 
 const network = process.argv[2];

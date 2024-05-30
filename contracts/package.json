@@ -7,7 +7,9 @@
     "build": "tsc",
     "deploy": "yarn build && node dist/src/deploy.js",
     "test": "yarn build && node dist/src/contracts/test.js",
-    "testAllocator": "yarn build && node dist/src/contracts/testAllocator.js"
+    "testAllocator": "yarn build && node dist/src/contracts/testAllocator.js",
+    "testFactory": "yarn build && node dist/src/contracts/testFactory.js",
+    "testPair": "yarn build && node dist/src/contracts/testPair.js"
   },
   "license": "MIT",
   "devDependencies": {

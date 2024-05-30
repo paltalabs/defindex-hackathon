@@ -66,11 +66,24 @@ export async function testAllocator(
     console.log("Already initialized:");
   }
 
+  const usdc_address =
+    "CCW67TSZV3SSS2HXMBQ5JFGCKJNXKZM7UQUWUZPUTHXSTZLEO7SJMI75";
+  // const usdc_address =
+  //   "CCKW6SMINDG6TUWJROIZ535EW2ZUJQEDGSKNIK3FBK26PAMBZDVK2BZA";
+  const xlm_address =
+    "CAS3J7GYLGXMF6TDJBBYYSE3HQ6BBSMLNUQ34T6TZMYMW2EVH34XOWMA";
+  // const xlm_address =
+  //   "CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC";
+  const pair_address =
+    "CAM7DY53G63XA4AJRS24Z6VFYAFSSF76C3RZ45BE5YU3FQS5255OOABP";
+  // const pair_address =
+  //   "CAAXGP7LTPV4A57LSKDWTSPPJUGFGNU34KQ3FYIPYUUP2SLFGVMTYKYU";
+
   console.log("-------------------------------------------------------");
   console.log("Starting Balances");
   console.log("-------------------------------------------------------");
   let usdcUserBalance = await invokeCustomContract(
-    "CCKW6SMINDG6TUWJROIZ535EW2ZUJQEDGSKNIK3FBK26PAMBZDVK2BZA",
+    usdc_address,
     "balance",
     [new Address(loadedConfig.admin.publicKey()).toScVal()],
     loadedConfig.admin,
@@ -81,7 +94,7 @@ export async function testAllocator(
     scValToNative(usdcUserBalance.result.retval)
   );
   let xlmUserBalance = await invokeCustomContract(
-    "CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC",
+    xlm_address,
     "balance",
     [new Address(loadedConfig.admin.publicKey()).toScVal()],
     loadedConfig.admin,
@@ -89,7 +102,7 @@ export async function testAllocator(
   );
   console.log("XLM USER BALANCE:", scValToNative(xlmUserBalance.result.retval));
   let lpUserBalance = await invokeCustomContract(
-    "CAAXGP7LTPV4A57LSKDWTSPPJUGFGNU34KQ3FYIPYUUP2SLFGVMTYKYU",
+    pair_address,
     "balance",
     [new Address(loadedConfig.admin.publicKey()).toScVal()],
     loadedConfig.admin,
@@ -117,7 +130,7 @@ export async function testAllocator(
   console.log("-------------------------------------------------------");
   try {
     const depositParams = [
-      nativeToScVal(10000000000, { type: "i128" }),
+      nativeToScVal(100000000, { type: "i128" }),
       new Address(loadedConfig.admin.publicKey()).toScVal(),
     ];
 
@@ -136,7 +149,7 @@ export async function testAllocator(
   console.log("Ending Balances");
   console.log("-------------------------------------------------------");
   usdcUserBalance = await invokeCustomContract(
-    "CCKW6SMINDG6TUWJROIZ535EW2ZUJQEDGSKNIK3FBK26PAMBZDVK2BZA",
+    usdc_address,
     "balance",
     [new Address(loadedConfig.admin.publicKey()).toScVal()],
     loadedConfig.admin,
@@ -147,7 +160,7 @@ export async function testAllocator(
     scValToNative(usdcUserBalance.result.retval)
   );
   xlmUserBalance = await invokeCustomContract(
-    "CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC",
+    xlm_address,
     "balance",
     [new Address(loadedConfig.admin.publicKey()).toScVal()],
     loadedConfig.admin,
@@ -155,7 +168,7 @@ export async function testAllocator(
   );
   console.log("XLM USER BALANCE:", scValToNative(xlmUserBalance.result.retval));
   lpUserBalance = await invokeCustomContract(
-    "CAAXGP7LTPV4A57LSKDWTSPPJUGFGNU34KQ3FYIPYUUP2SLFGVMTYKYU",
+    pair_address,
     "balance",
     [new Address(loadedConfig.admin.publicKey()).toScVal()],
     loadedConfig.admin,
