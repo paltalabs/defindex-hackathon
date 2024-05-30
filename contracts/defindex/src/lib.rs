@@ -1,10 +1,13 @@
 #![no_std]
-use soroban_sdk::{contract, contractimpl, Address, Env, String, Symbol, Vec};
+use soroban_sdk::{
+    auth::{ContractContext, InvokerContractAuthEntry, SubContractInvocation},
+    contract, contractimpl, vec, Address, Env, IntoVal, String, Symbol, Val, Vec,
+};
 
 mod adapter;
 mod error;
-mod storage;
 mod models;
+mod storage;
 
 use adapter::DefIndexAdapterClient;
 pub use error::ContractError;
@@ -29,7 +32,7 @@ pub trait AllocatorTrait {
 
     fn deposit(e: Env, amount: i128, from: Address) -> Result<(), ContractError>;
 
-    fn print(e: Env) -> Address;
+    fn get_adapter_address(e: Env) -> Address;
 }
 
 #[contract]
@@ -46,18 +49,18 @@ impl AllocatorTrait for Allocator {
 
         set_initialized(&e, true);
         set_total_adapters(&e, &adapters.len());
-    
+
         for adapter in adapters.iter() {
             set_share(&e, adapter.index.clone(), adapter.share.clone());
-            set_adapter(&e, adapter.index.clone(), &adapter.address);   
+            set_adapter(&e, adapter.index.clone(), &adapter.address);
         }
 
         Ok(())
     }
-    
 
     fn deposit(e: Env, amount: i128, from: Address) -> Result<(), ContractError> {
         check_initialized(&e)?;
+        from.require_auth();
 
         let total_adapters = get_total_adapters(&e);
         let mut total_amount_used: i128 = 0;
@@ -68,11 +71,11 @@ impl AllocatorTrait for Allocator {
             let adapter_address = get_adapter(&e, i);
             let adapter_client = DefIndexAdapterClient::new(&e, &adapter_address);
 
-
             let adapter_amount = if i == (total_adapters - 1) {
                 amount - total_amount_used
             } else {
-                amount.checked_mul(adapter_share.into())
+                amount
+                    .checked_mul(adapter_share.into())
                     .and_then(|prod| prod.checked_div(100))
                     .ok_or(ContractError::ArithmeticError)?
             };
@@ -84,7 +87,7 @@ impl AllocatorTrait for Allocator {
         Ok(())
     }
 
-    fn print(e: Env) -> Address {
+    fn get_adapter_address(e: Env) -> Address {
         get_adapter(&e, 0)
     }
 }
