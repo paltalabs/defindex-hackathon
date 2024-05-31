@@ -58,7 +58,7 @@ function CreateIndex() {
       </h2>
       <Card variant="outline" px={16} py={16} bgColor="whiteAlpha.100">
         {adapters.map((adapter, index) => (
-          <ItemSlider key={index} address={adapter.address} value={adapter.value} />
+          <ItemSlider key={index} name={adapter.name} address={adapter.address} value={adapter.value} />
         ))}
         <div>
           <h2>Total: {totalValues}%</h2>
