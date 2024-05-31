@@ -5,7 +5,7 @@ import {
 } from '@chakra-ui/react'
 import ItemSlider from './Slider'
 import AddNewAdapterButton from './AddNewAdapterButton'
-import { useAppSelector } from '@/store/lib/storeHooks'
+import { useAppDispatch, useAppSelector } from '@/store/lib/storeHooks'
 import { useFactoryCallback, FactoryMethod } from '@/hooks/useFactory'
 import {
   Address,
@@ -13,9 +13,11 @@ import {
   scValToNative,
   xdr,
 } from "@stellar/stellar-sdk";
+import { pushIndex } from '@/store/lib/features/walletStore'
 
 function CreateIndex() {
   const adapters = useAppSelector(state => state.adapters.adapters)
+  const dispatch = useAppDispatch();
 
   const factory = useFactoryCallback()
 
@@ -47,7 +49,8 @@ function CreateIndex() {
       createDefindexParams,
       true,
     )
-    console.log('🚀 ~ deployDefindex ~ result:', scValToNative(result.returnValue));
+    const parsedResult = scValToNative(result.returnValue);
+    dispatch(pushIndex(parsedResult))
     return result;
   }
   const totalValues = useAppSelector(state => state.adapters.totalValues)

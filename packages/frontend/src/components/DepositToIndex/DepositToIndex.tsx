@@ -1,5 +1,6 @@
 import { DefindexMethod, useDefindexCallback } from '@/hooks/useDefindex'
-import { Button, Card, Input } from '@chakra-ui/react'
+import { useAppSelector } from '@/store/lib/storeHooks'
+import { Button, Card, Input, Radio, RadioGroup, Stack } from '@chakra-ui/react'
 import { useSorobanReact } from '@soroban-react/core'
 import { Address, nativeToScVal, scValToNative, xdr } from '@stellar/stellar-sdk'
 import React, { useEffect, useState } from 'react'
@@ -12,6 +13,8 @@ function DepositToIndex() {
 
   const {address} = useSorobanReact();
   const defindex = useDefindexCallback()
+
+  const createdIndexes = useAppSelector(state => state.wallet.createdIndexes)
 
   const depositDefindex = async () => {
     if (!address || !amount) return;
@@ -80,6 +83,13 @@ function DepositToIndex() {
     <>
       <h2>DepositToIndex</h2>
       <Card variant="outline" px={16} py={16} bgColor="whiteAlpha.100">
+        <RadioGroup defaultValue='0' onChange={(e) => set_defindex_address(e)}>
+          <Stack>
+            {createdIndexes.map((index, i) => (
+              <Radio value={index} key={i}>{index}</Radio>
+            ))}
+          </Stack>
+        </RadioGroup>
         <Input my={4} type="text" onChange={(e) => set_defindex_address(e.target.value)} placeholder='Defindex address' value={defindex_address} />
         <Input my={4} type="text" onChange={(e) => set_amount(Number(e.target.value))} placeholder='Amount' value={amount} />
         <Button my={4} colorScheme='green' onClick={depositDefindex}>Deposit</Button>
