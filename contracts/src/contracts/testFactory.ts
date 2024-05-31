@@ -38,48 +38,48 @@ export async function testFactory(
     console.log("error:", error);
     console.log("Already initialized:");
   }
-  console.log("-------------------------------------------------------");
-  console.log(`Deploying a Defindex Contract`);
-  console.log("-------------------------------------------------------");
+  // console.log("-------------------------------------------------------");
+  // console.log(`Deploying a Defindex Contract`);
+  // console.log("-------------------------------------------------------");
 
-  const adapterAddressPair = [
-    {
-      share: 100,
-      address: new Address(addressBook.getContractId("soroswap_adapter")),
-    },
-  ];
-  const adapterAddressPairScVal = adapterAddressPair.map((adapter, index) => {
-    return xdr.ScVal.scvMap([
-      new xdr.ScMapEntry({
-        key: xdr.ScVal.scvSymbol("address"),
-        val: adapter.address.toScVal(),
-      }),
-      new xdr.ScMapEntry({
-        key: xdr.ScVal.scvSymbol("index"),
-        val: xdr.ScVal.scvU32(index),
-      }),
-      new xdr.ScMapEntry({
-        key: xdr.ScVal.scvSymbol("share"),
-        val: xdr.ScVal.scvU32(adapter.share),
-      }),
-    ]);
-  });
+  // const adapterAddressPair = [
+  //   {
+  //     share: 100,
+  //     address: new Address(addressBook.getContractId("soroswap_adapter")),
+  //   },
+  // ];
+  // const adapterAddressPairScVal = adapterAddressPair.map((adapter, index) => {
+  //   return xdr.ScVal.scvMap([
+  //     new xdr.ScMapEntry({
+  //       key: xdr.ScVal.scvSymbol("address"),
+  //       val: adapter.address.toScVal(),
+  //     }),
+  //     new xdr.ScMapEntry({
+  //       key: xdr.ScVal.scvSymbol("index"),
+  //       val: xdr.ScVal.scvU32(index),
+  //     }),
+  //     new xdr.ScMapEntry({
+  //       key: xdr.ScVal.scvSymbol("share"),
+  //       val: xdr.ScVal.scvU32(adapter.share),
+  //     }),
+  //   ]);
+  // });
 
-  const adapterAddressesScVal = xdr.ScVal.scvVec(adapterAddressPairScVal);
+  // const adapterAddressesScVal = xdr.ScVal.scvVec(adapterAddressPairScVal);
 
-  const createDefindexParams: xdr.ScVal[] = [adapterAddressesScVal];
+  // const createDefindexParams: xdr.ScVal[] = [adapterAddressesScVal];
 
-  try {
-    const result = await invokeCustomContract(
-      addressBook.getContractId(contractKey),
-      "create_defindex",
-      createDefindexParams,
-      loadedConfig.admin
-    );
-    console.log("🚀 « result:", result);
-  } catch (error) {
-    console.log("error:", error);
-  }
+  // try {
+  //   const result = await invokeCustomContract(
+  //     addressBook.getContractId(contractKey),
+  //     "create_defindex",
+  //     createDefindexParams,
+  //     loadedConfig.admin
+  //   );
+  //   console.log("🚀 « result:", result);
+  // } catch (error) {
+  //   console.log("error:", error);
+  // }
 }
 
 const network = process.argv[2];
