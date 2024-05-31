@@ -1,4 +1,5 @@
 import CreateIndex from '@/components/CreateIndex/CreateIndex'
+import DepositToIndex from '@/components/DepositToIndex/DepositToIndex'
 import { HomePageTitle } from '@/components/home/HomePageTitle'
 import { CenterBody } from '@/components/layout/CenterBody'
 import { ChainInfo } from '@/components/web3/ChainInfo'
@@ -32,13 +33,8 @@ const HomePage: NextPage = () => {
           <CreateIndex />
         </div>
 
-
-        <div tw="mt-10 flex w-full flex-wrap items-start justify-center gap-4">
-          {/* Chain Metadata Information */}
-          <ChainInfo />
-
-          {/* Greeter Read/Write Contract Interactions */}
-          {/* <GreeterContractInteractions /> */}
+        <div tw='mt-10 flex flex-col w-4/6 content-center gap-4'>
+          <DepositToIndex />
         </div>
       </CenterBody>
     </>
