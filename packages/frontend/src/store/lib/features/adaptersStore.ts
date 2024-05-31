@@ -3,7 +3,7 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 import type { RootState } from '../store'
 import adapters from './adapters.json'
 
-interface Adapter {
+export interface Adapter {
   address: string;
   value: number;
   name?: string;
@@ -22,11 +22,17 @@ const initialState: AdaptersState = {
   totalValues: 0
 }
 
-export const defaultAdapters = adapters.map((adapter) => ({
-  address: adapter.address,
-  name: adapter.name,
-  value: 0
-}))
+//Filtrar adapters por network y retornar array de adapters
+export const getDefaultAdapters = (network: string) => {
+  const filteredAdapters = adapters.filter(adapter => {
+    if(adapter.network === network){
+      return adapter.adapters
+    }})
+    console.log('filteredAdapters', filteredAdapters[0].adapters)
+  return filteredAdapters
+}
+
+
 
 export const adaptersSlice = createSlice({
   name: 'Adapters',
