@@ -100,7 +100,7 @@ function ItemSlider({
   return (
     <Grid templateColumns="repeat(5, 1fr)" gap={2} alignItems={'center'} my={4}>
       <GridItem colSpan={8} display={'flex'} alignItems={'center'}>
-        <h3>{name}</h3>
+        <h3>{name ? name : address}</h3>
         <IconButton
           aria-label='delete__button'
           mx={2}
