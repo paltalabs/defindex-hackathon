@@ -5,6 +5,7 @@ import { CenterBody } from '@/components/layout/CenterBody'
 import { ChainInfo } from '@/components/web3/ChainInfo'
 import { ConnectButton } from '@/components/web3/ConnectButton'
 import { GreeterContractInteractions } from '@/components/web3/GreeterContractInteractions'
+import { useSorobanReact } from '@soroban-react/core'
 import type { NextPage } from 'next'
 import 'twin.macro'
 
@@ -15,7 +16,7 @@ const HomePage: NextPage = () => {
   //   if (!error) return
   //   toast.error(error.message)
   // }, [error])
-
+  const { address } = useSorobanReact();
   return (
     <>
       {/* Top Bar */}
@@ -24,18 +25,16 @@ const HomePage: NextPage = () => {
       <CenterBody tw="mt-20 mb-10 px-5">
         {/* Title */}
         <HomePageTitle />
+        {address == undefined ? <ConnectButton /> :
+          <>
+            <div tw='mt-10 flex flex-col w-4/6 content-center gap-4'>
+              <CreateIndex />
+              <DepositToIndex />
+            </div>
+          </>}
 
-        {/* Connect Wallet Button */}
-        <ConnectButton />
 
-        {/* Create index section */}
-        <div tw='mt-10 flex flex-col w-4/6 content-center gap-4'>
-          <CreateIndex />
-        </div>
 
-        <div tw='mt-10 flex flex-col w-4/6 content-center gap-4'>
-          <DepositToIndex />
-        </div>
       </CenterBody>
     </>
   )
