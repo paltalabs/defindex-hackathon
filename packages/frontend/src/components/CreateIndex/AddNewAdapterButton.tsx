@@ -43,7 +43,8 @@ function AddNewAdapterButton() {
 
 
   useEffect(() => {
-    const tempAdapters = getDefaultAdapters(activeChain?.name?.toLocaleLowerCase() || 'testnet')
+    const tempAdapters = getDefaultAdapters(activeChain?.networkPassphrase || 'Test SDF Network ; September 2015')
+    console.log('tempAdapters', tempAdapters)
     setDefaultAdapters(tempAdapters[0].adapters as DefaultAdapter[])
   }, [activeChain])
 

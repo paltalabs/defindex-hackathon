@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import type { RootState } from '../store'
 import adapters from './adapters.json'
+import { Networks } from '@stellar/stellar-sdk'
 
 export interface Adapter {
   address: string;
@@ -24,11 +25,24 @@ const initialState: AdaptersState = {
 
 //Filtrar adapters por network y retornar array de adapters
 export const getDefaultAdapters = (network: string) => {
+  console.log('network', Networks.TESTNET)
   const filteredAdapters = adapters.filter(adapter => {
-    if(adapter.network === network){
-      return adapter.adapters
-    }})
-    console.log('filteredAdapters', filteredAdapters[0].adapters)
+    switch (network) {
+      case Networks.TESTNET:
+        console.log('✨', 'testnet')
+        return adapter.network === 'testnet'
+      case Networks.PUBLIC:
+        console.log('✨', 'public')
+        return adapter.network === 'public'
+      default:
+        console.log('✨', 'testnet')
+        return adapter.network === 'testnet'
+    }
+  })
+  console.log('filteredAdapters', filteredAdapters)
+  if(filteredAdapters.length === 0){
+    return [adapters[0]]
+  }
   return filteredAdapters
 }
 
