@@ -11,7 +11,7 @@ const isObject = (val: unknown) => typeof val === 'object' && val !== null && !A
 
 export function useFactoryCallback() {
     const sorobanContext = useSorobanReact();
-    const factoryAddress = "CAAVR6P34HBXEAILYAERUNOFV5BYQ5V2LKO53BHZ6ZCZ3WBGEP7XQGQ3"
+    const factoryAddress = "CD2YCYJZOZPN22PESYMUYDKDSW63OQ2EJOW27BOVFXQ4ZTVX6ELMIJ6P"
 
     return useCallback(
         async (method: FactoryMethod, args?: StellarSdk.xdr.ScVal[], signAndSend?: boolean) => {
