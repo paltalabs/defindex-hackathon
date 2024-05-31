@@ -9,6 +9,8 @@ import { useAppSelector } from '@/store/lib/storeHooks'
 import { useFactoryCallback, FactoryMethod } from '@/hooks/useFactory'
 import {
   Address,
+  nativeToScVal,
+  scValToNative,
   xdr,
 } from "@stellar/stellar-sdk";
 
@@ -40,12 +42,12 @@ function CreateIndex() {
 
     const createDefindexParams: xdr.ScVal[] = [adapterAddressesScVal];
     console.log('deploying Defindex')
-    const result = await factory(
+    const result: any = await factory(
       FactoryMethod.CREATE_DEFINDEX,
       createDefindexParams,
       true,
     )
-    console.log('🚀 ~ deployDefindex ~ result:', result);
+    console.log('🚀 ~ deployDefindex ~ result:', scValToNative(result.returnValue));
     return result;
   }
   const totalValues = useAppSelector(state => state.adapters.totalValues)
