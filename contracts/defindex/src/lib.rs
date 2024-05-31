@@ -33,6 +33,11 @@ pub trait AllocatorTrait {
     fn deposit(e: Env, amount: i128, from: Address) -> Result<(), ContractError>;
 
     fn get_adapter_address(e: Env) -> Address;
+
+    fn balance(
+        e: Env,
+        from: Address,
+    ) -> Result<Vec<i128>, ContractError>;
 }
 
 #[contract]
@@ -89,6 +94,23 @@ impl AllocatorTrait for Allocator {
 
     fn get_adapter_address(e: Env) -> Address {
         get_adapter(&e, 0)
+    }
+
+    fn balance(
+        e: Env,
+        from: Address,
+    ) -> Result<Vec<i128>, ContractError> {
+        let total_adapters = get_total_adapters(&e);
+        let mut total_balances: Vec<i128> = Vec::new(&e);
+
+        for i in 0..total_adapters {
+            let adapter_address = get_adapter(&e, i);
+            let adapter_client = DefIndexAdapterClient::new(&e, &adapter_address);
+
+            total_balances.push_back(adapter_client.balance(&from));
+        }
+
+        Ok(total_balances)
     }
 }
 

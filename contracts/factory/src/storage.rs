@@ -1,5 +1,5 @@
 use soroban_sdk::{
-    contracttype, Address, BytesN, Env, Val, TryFromVal
+    contracttype, BytesN, Env, Val, TryFromVal
 };
 use crate::error::FactoryError;
 

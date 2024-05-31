@@ -1,5 +1,5 @@
-cd soroswap_adapter
+cd factory
 make build
 cd ..
-yarn deploy testnet soroswap_adapter
-yarn test testnet soroswap_adapter
+yarn deploy testnet factory
+yarn testFactory testnet factory

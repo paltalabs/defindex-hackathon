@@ -7,7 +7,7 @@
   {
     "contractId": "defindex",
     "networkPassphrase": "Test SDF Network ; September 2015",
-    "contractAddress": "CAE4XW2JK2KHKVQ6ZSQ4ZURF6LNWZZ36Z64X6DWJXUJW552YTSBHDDBZ"
+    "contractAddress": "CAKMQFYMLRSZTK4GLC3CK4GPIOW64T3CDZUCT72353AKPA3LCUFOLFAW"
   },
   {
     "contractId": "soroswap_adapter",
@@ -27,6 +27,6 @@
   {
     "contractId": "factory",
     "networkPassphrase": "Test SDF Network ; September 2015",
-    "contractAddress": "CBGDRWENLV6IPV5JHOH75NIYYNGL6AYYASZV2EILDXQXSXGOSGUZCI33"
+    "contractAddress": "CAAVR6P34HBXEAILYAERUNOFV5BYQ5V2LKO53BHZ6ZCZ3WBGEP7XQGQ3"
   }
 ]

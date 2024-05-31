@@ -76,7 +76,7 @@ export async function testFactory(
       createDefindexParams,
       loadedConfig.admin
     );
-    console.log("🚀 « result:", scValToNative(result.returnValue));
+    console.log("🚀 « result:", result);
   } catch (error) {
     console.log("error:", error);
   }
