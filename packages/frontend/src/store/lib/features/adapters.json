@@ -3,8 +3,8 @@
     "network": "testnet",
     "adapters": [
       {
-        "address": "address1",
         "name": "Soroswap XLM/USDC",
+        "address": "CA24UMIBCBQAINFACCIRQESYMCNGK7ZG5BGXJRYRI2WCTDGQR23JJR7R",
         "value": 0
       },
       {
@@ -28,8 +28,8 @@
     "network": "public",
     "adapters": [
       {
-        "address": "address1",
         "name": "Soroswap XLM/USDC",
+        "address": "CCOIE5HUT2SP5YDC7OMKUEFWOH27AR45WQ6VSP32TQIWKE3MBUAVZE52",
         "value": 0
       },
       {
