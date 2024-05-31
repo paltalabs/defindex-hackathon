@@ -2,22 +2,22 @@
   {
     "contractId": "soroswap_adapter",
     "networkPassphrase": "Test SDF Network ; September 2015",
-    "contractAddress": "CCR6CDHM7YOG5AMTMCGDRNTO7RVO76RTK6RGYQ4P7UBS7UFPJUK5UN3S"
+    "contractAddress": "CA24UMIBCBQAINFACCIRQESYMCNGK7ZG5BGXJRYRI2WCTDGQR23JJR7R"
   },
   {
     "contractId": "defindex",
     "networkPassphrase": "Test SDF Network ; September 2015",
-    "contractAddress": "CAE4XW2JK2KHKVQ6ZSQ4ZURF6LNWZZ36Z64X6DWJXUJW552YTSBHDDBZ"
+    "contractAddress": "CCDWQ6VKPP7GZDT3QE2OQKIYOZ3DDMVFXJVYFKFI5KZ3JZ4LP4MGWFHF"
   },
   {
     "contractId": "soroswap_adapter",
     "networkPassphrase": "Public Global Stellar Network ; September 2015",
-    "contractAddress": "CCHC7FAP7L7UFCLBJDQZVFQVHWG2ZDXQSZVPWRXCZVKCFUNCRUDX6IHU"
+    "contractAddress": "CCOIE5HUT2SP5YDC7OMKUEFWOH27AR45WQ6VSP32TQIWKE3MBUAVZE52"
   },
   {
     "contractId": "defindex",
     "networkPassphrase": "Public Global Stellar Network ; September 2015",
-    "contractAddress": "CDJ3DWKNQRDM5OFKXE7Y3AZPXIXJTOG33IGL7XQHTBVNZMYRCRLPXTM5"
+    "contractAddress": "CDIHOQGZLCZBDGRHSS2NBTXTLVCCU5THOFQA5XT2MBOXS6E2BJOO77WJ"
   },
   {
     "contractId": "soroswap_adapter_pair",
@@ -27,6 +27,6 @@
   {
     "contractId": "factory",
     "networkPassphrase": "Test SDF Network ; September 2015",
-    "contractAddress": "CBGDRWENLV6IPV5JHOH75NIYYNGL6AYYASZV2EILDXQXSXGOSGUZCI33"
+    "contractAddress": "CAAVR6P34HBXEAILYAERUNOFV5BYQ5V2LKO53BHZ6ZCZ3WBGEP7XQGQ3"
   }
 ]
