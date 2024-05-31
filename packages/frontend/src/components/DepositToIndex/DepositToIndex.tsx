@@ -10,7 +10,7 @@ function DepositToIndex() {
   const [balance, set_balance] = useState<number>(0)
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
-  const {address} = useSorobanReact();
+  const { address } = useSorobanReact();
   const defindex = useDefindexCallback()
 
   const depositDefindex = async () => {
@@ -71,7 +71,8 @@ function DepositToIndex() {
         false,
       )
       const nativeResult = scValToNative(result)
-      const parsedResult = nativeResult / Math.pow(10, 7)
+      const sum = nativeResult.reduce((acc: number, val: number) => Number(acc) + Number(val), 0);
+      const parsedResult = sum / Math.pow(10, 7)
       set_balance(parsedResult)
     }
   }
