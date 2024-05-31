@@ -1,18 +1,47 @@
 [
   {
-    "address": "CCHC7FAP7L7UFCLBJDQZVFQVHWG2ZDXQSZVPWRXCZVKCFUNCRUDX6IHU",
-    "name": "Soroswap XLM/USDC"
+    "network": "testnet",
+    "adapters": [
+      {
+        "address": "address1",
+        "name": "Soroswap XLM/USDC",
+        "value": 0
+      },
+      {
+        "address": "address2",
+        "name": "Xycloans XLM",
+        "value": 0
+      },
+      {
+        "address": "address3",
+        "name": "Blend USDC",
+        "value": 0
+      },
+      {
+        "address": "address4",
+        "name": "StellaSwap XLM/GLMR",
+        "value": 0
+      }
+    ]
   },
   {
-    "address": "CCHC7FAP7L7UFCLBJDQZVFQVHWG2ZDXQSZVPWRXCZVKCFUNCRUDX6IHU",
-    "name": "Xycloans XLM"
-  },
-  {
-    "address": "CCHC7FAP7L7UFCLBJDQZVFQVHWG2ZDXQSZVPWRXCZVKCFUNCRUDX6IHU",
-    "name": "Blend USDC"
-  },
-  {
-    "address": "CCHC7FAP7L7UFCLBJDQZVFQVHWG2ZDXQSZVPWRXCZVKCFUNCRUDX6IHU",
-    "name": "StellaSwap XLM/GLMR"
+    "network": "public",
+    "adapters": [
+      {
+        "address": "address1",
+        "name": "Soroswap XLM/USDC",
+        "value": 0
+      },
+      {
+        "address": "address2",
+        "name": "Xycloans XLM",
+        "value": 0
+      },
+      {
+        "address": "address3",
+        "name": "Blend USDC",
+        "value": 0
+      }
+    ]
   }
 ]
