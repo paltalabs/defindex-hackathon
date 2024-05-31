@@ -1,5 +1,5 @@
-cd factory
+cd defindex
 make build
 cd ..
-yarn deploy testnet factory
-yarn testFactory testnet factory
+yarn deploy testnet defindex
+yarn testAllocator testnet defindex

@@ -23,4 +23,9 @@ pub trait DefIndexAdapterTrait {
         e: Env,
         from: Address,
     ) -> Result<i128, AdapterError>;
+    
+    fn withdraw(
+        e: Env,
+        from: Address,
+    ) -> Result<(), AdapterError>;
 }

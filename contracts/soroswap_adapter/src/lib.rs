@@ -66,17 +66,17 @@ impl DefIndexAdapterTrait for SoroswapAdapter {
         check_nonnegative_amount(amount)?;
         extend_instance_ttl(&e);
 
-        // let usdc_address = Address::from_string(&String::from_str(&e, "CCW67TSZV3SSS2HXMBQ5JFGCKJNXKZM7UQUWUZPUTHXSTZLEO7SJMI75"));
-        // let xlm_address = Address::from_string(&String::from_str(&e, "CAS3J7GYLGXMF6TDJBBYYSE3HQ6BBSMLNUQ34T6TZMYMW2EVH34XOWMA"));
-        let usdc_address = Address::from_string(&String::from_str(&e, "CCKW6SMINDG6TUWJROIZ535EW2ZUJQEDGSKNIK3FBK26PAMBZDVK2BZA"));
-        let xlm_address = Address::from_string(&String::from_str(&e, "CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC"));
+        let usdc_address = Address::from_string(&String::from_str(&e, "CCW67TSZV3SSS2HXMBQ5JFGCKJNXKZM7UQUWUZPUTHXSTZLEO7SJMI75"));
+        let xlm_address = Address::from_string(&String::from_str(&e, "CAS3J7GYLGXMF6TDJBBYYSE3HQ6BBSMLNUQ34T6TZMYMW2EVH34XOWMA"));
+        // let usdc_address = Address::from_string(&String::from_str(&e, "CCKW6SMINDG6TUWJROIZ535EW2ZUJQEDGSKNIK3FBK26PAMBZDVK2BZA"));
+        // let xlm_address = Address::from_string(&String::from_str(&e, "CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC"));
         
         // Setting up Soroswap router client
         let soroswap_router_address = get_soroswap_router_address(&e);
         let soroswap_router_client = SoroswapRouterClient::new(&e, &soroswap_router_address);
         
-        // let pair_address = Address::from_string(&String::from_str(&e, "CAM7DY53G63XA4AJRS24Z6VFYAFSSF76C3RZ45BE5YU3FQS5255OOABP"));
-        let pair_address = Address::from_string(&String::from_str(&e, "CAAXGP7LTPV4A57LSKDWTSPPJUGFGNU34KQ3FYIPYUUP2SLFGVMTYKYU"));
+        let pair_address = Address::from_string(&String::from_str(&e, "CAM7DY53G63XA4AJRS24Z6VFYAFSSF76C3RZ45BE5YU3FQS5255OOABP"));
+        // let pair_address = Address::from_string(&String::from_str(&e, "CAAXGP7LTPV4A57LSKDWTSPPJUGFGNU34KQ3FYIPYUUP2SLFGVMTYKYU"));
         // let pair_address = soroswap_router_client.router_pair_for(&usdc_address, &xlm_address);
 
         let swap_amount = amount.checked_div(2).unwrap();
@@ -127,6 +127,74 @@ impl DefIndexAdapterTrait for SoroswapAdapter {
         Ok(())
     }
 
+    fn withdraw(
+        e: Env,
+        from: Address,
+    ) -> Result<(), AdapterError> {
+        from.require_auth();
+        check_initialized(&e)?;
+        extend_instance_ttl(&e);
+
+        let usdc_address = Address::from_string(&String::from_str(&e, "CCW67TSZV3SSS2HXMBQ5JFGCKJNXKZM7UQUWUZPUTHXSTZLEO7SJMI75"));
+        let xlm_address = Address::from_string(&String::from_str(&e, "CAS3J7GYLGXMF6TDJBBYYSE3HQ6BBSMLNUQ34T6TZMYMW2EVH34XOWMA"));
+        // let usdc_address = Address::from_string(&String::from_str(&e, "CCKW6SMINDG6TUWJROIZ535EW2ZUJQEDGSKNIK3FBK26PAMBZDVK2BZA"));
+        // let xlm_address = Address::from_string(&String::from_str(&e, "CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC"));
+        
+        // Setting up Soroswap router client
+        let soroswap_router_address = get_soroswap_router_address(&e);
+        let soroswap_router_client = SoroswapRouterClient::new(&e, &soroswap_router_address);
+        
+        let pair_address = Address::from_string(&String::from_str(&e, "CAM7DY53G63XA4AJRS24Z6VFYAFSSF76C3RZ45BE5YU3FQS5255OOABP"));
+        // let pair_address = Address::from_string(&String::from_str(&e, "CAAXGP7LTPV4A57LSKDWTSPPJUGFGNU34KQ3FYIPYUUP2SLFGVMTYKYU"));
+    
+        let soroswap_pair_client = SoroswapPairClient::new(&e, &pair_address);
+        let lp_balance = soroswap_pair_client.balance(&from);
+
+        let mut swap_args: Vec<Val> = vec![&e];
+        swap_args.push_back(from.into_val(&e));
+        swap_args.push_back(pair_address.into_val(&e));
+        swap_args.push_back(lp_balance.into_val(&e));
+
+        e.authorize_as_current_contract(vec![
+            &e,
+            InvokerContractAuthEntry::Contract( SubContractInvocation {
+                context: ContractContext {
+                    contract: pair_address.clone(),
+                    fn_name: Symbol::new(&e, "transfer"),
+                    args: swap_args.clone(),
+                },
+                sub_invocations: vec![&e]
+            })
+        ]);
+
+        // Remove liquidity
+        let (usdc_amount, xlm_amount) = soroswap_router_client.remove_liquidity(
+            &usdc_address,
+            &xlm_address,
+            &lp_balance,
+            &0,
+            &0,
+            &from,
+            &u64::MAX,
+        );
+
+        let mut path: Vec<Address> = Vec::new(&e);
+        path.push_back(xlm_address.clone());
+        path.push_back(usdc_address.clone());
+
+        let swap_result = soroswap_router_client.swap_exact_tokens_for_tokens(
+            &xlm_amount,
+            &0,
+            &path,
+            &from,
+            &u64::MAX,
+        );
+
+        // let total_swapped_amount = swap_result.last().unwrap();
+
+        Ok(())
+    }
+
     fn balance(
         e: Env,
         from: Address,
@@ -135,7 +203,8 @@ impl DefIndexAdapterTrait for SoroswapAdapter {
         const SCALE: i128 = 10_000_000; // A scaling factor to maintain precision within 7 decimals
     
         // Should get pair reserves
-        let pair_address = Address::from_string(&String::from_str(&e, "CAAXGP7LTPV4A57LSKDWTSPPJUGFGNU34KQ3FYIPYUUP2SLFGVMTYKYU"));
+        let pair_address = Address::from_string(&String::from_str(&e, "CAM7DY53G63XA4AJRS24Z6VFYAFSSF76C3RZ45BE5YU3FQS5255OOABP"));
+        // let pair_address = Address::from_string(&String::from_str(&e, "CAAXGP7LTPV4A57LSKDWTSPPJUGFGNU34KQ3FYIPYUUP2SLFGVMTYKYU"));
         let soroswap_pair_client = SoroswapPairClient::new(&e, &pair_address);
     
         // Get the reserves from the pair

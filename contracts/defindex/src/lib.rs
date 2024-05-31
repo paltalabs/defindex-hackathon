@@ -38,6 +38,11 @@ pub trait AllocatorTrait {
         e: Env,
         from: Address,
     ) -> Result<Vec<i128>, ContractError>;
+
+    fn withdraw(
+        e: Env,
+        from: Address,
+    ) -> Result<(), ContractError>;
 }
 
 #[contract]
@@ -111,6 +116,23 @@ impl AllocatorTrait for Allocator {
         }
 
         Ok(total_balances)
+    }
+
+    fn withdraw(
+        e: Env,
+        from: Address,
+    ) -> Result<(), ContractError>{
+        from.require_auth();
+        let total_adapters = get_total_adapters(&e);
+
+        for i in 0..total_adapters {
+            let adapter_address = get_adapter(&e, i);
+            let adapter_client = DefIndexAdapterClient::new(&e, &adapter_address);
+
+            adapter_client.withdraw(&from);
+        }
+
+        Ok(())
     }
 }
 
