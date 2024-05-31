@@ -21,9 +21,11 @@ import { setAdapterValue, removeAdapter } from '@/store/lib/features/adaptersSto
 function ItemSlider({
   address = 'Address',
   value = 0,
+  name = "Soroswap adapter"
 }: {
   address: string,
   value: number,
+  name?: string,
 }) {
   const dispatch = useAppDispatch()
   const [showTooltip, setShowTooltip] = React.useState(false)
@@ -98,7 +100,7 @@ function ItemSlider({
   return (
     <Grid templateColumns="repeat(5, 1fr)" gap={2} alignItems={'center'} my={4}>
       <GridItem colSpan={8} display={'flex'} alignItems={'center'}>
-        <h3>{address}</h3>
+        <h3>{name}</h3>
         <IconButton
           aria-label='delete__button'
           mx={2}

@@ -10,9 +10,13 @@ soroban_sdk::contractimport!(
 pub fn create_contract(
     e: &Env, // Pass in the current environment as an argument
     defindex_wasm_hash: BytesN<32>, // Pass in the hash of the token contract's WASM file
+    adapters: Vec<AdapterParams>
 ) -> Address {
-    // Return the hash of the newly created contract as a Address value
+    
     let mut salt = Bytes::new(e);
+
+    // Append the bytes of the address and name to the salt
+    salt.append(&adapters.clone().to_xdr(e)); 
 
     // Use the deployer() method of the current environment to create a new contract instance
     e.deployer()

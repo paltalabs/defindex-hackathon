@@ -38,7 +38,7 @@ fn create_defindex(e: Env, adapters: Vec<AdapterParams>) -> Result<Address, Fact
     extend_instance_ttl(&e);
 
     let defi_wasm_hash = get_defi_wasm_hash(&e)?;
-    let defindex_address = create_contract(&e, defi_wasm_hash);
+    let defindex_address = create_contract(&e, defi_wasm_hash, adapters.clone());
 
     defindex::Client::new(&e, &defindex_address).initialize(
         &adapters

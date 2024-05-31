@@ -4,11 +4,52 @@ import {
   Button,
 } from '@chakra-ui/react'
 import ItemSlider from './Slider'
-import { useAppSelector } from '@/store/lib/storeHooks'
 import AddNewAdapterButton from './AddNewAdapterButton'
+import { useAppSelector } from '@/store/lib/storeHooks'
+import { useFactoryCallback, FactoryMethod } from '@/hooks/useFactory'
+import {
+  Address,
+  xdr,
+} from "@stellar/stellar-sdk";
+
 function CreateIndex() {
   const adapters = useAppSelector(state => state.adapters.adapters)
+
+  const factory = useFactoryCallback()
+
+  const deployDefindex = async () => {
+    const adapterAddressPairScVal = adapters.map((adapter, index) => {
+      return xdr.ScVal.scvMap([
+        new xdr.ScMapEntry({
+          key: xdr.ScVal.scvSymbol("address"),
+          val: (new Address(adapter.address)).toScVal(),
+
+        }),
+        new xdr.ScMapEntry({
+          key: xdr.ScVal.scvSymbol("index"),
+          val: xdr.ScVal.scvU32(index),
+        }),
+        new xdr.ScMapEntry({
+          key: xdr.ScVal.scvSymbol("share"),
+          val: xdr.ScVal.scvU32(adapter.value),
+        }),
+      ]);
+    });
+
+    const adapterAddressesScVal = xdr.ScVal.scvVec(adapterAddressPairScVal);
+
+    const createDefindexParams: xdr.ScVal[] = [adapterAddressesScVal];
+    console.log('deploying Defindex')
+    const result = await factory(
+      FactoryMethod.CREATE_DEFINDEX,
+      createDefindexParams,
+      true,
+    )
+    console.log('🚀 ~ deployDefindex ~ result:', result);
+    return result;
+  }
   const totalValues = useAppSelector(state => state.adapters.totalValues)
+
 
   return (
     <>
@@ -22,6 +63,9 @@ function CreateIndex() {
         <div>
           <h2>Total: {totalValues}%</h2>
         </div>
+        <Button colorScheme="purple" size="lg" mt={4} onClick={deployDefindex}>
+          Deploy DeFindex
+        </Button>
         <AddNewAdapterButton />
       </Card>
     </>
